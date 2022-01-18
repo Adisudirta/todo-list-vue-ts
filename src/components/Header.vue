@@ -17,7 +17,7 @@ export default Header;
 
     <div>
       <a href="https://github.com/Adisudirta/todo-list-vue-ts" target="_blank">
-        About Repository
+        About Repository?
       </a>
     </div>
   </header>
@@ -30,13 +30,13 @@ $secondary-color: #2c3e50;
 
 header {
   align-items: center;
+  border-bottom: 7px solid rgb(5, 75, 5);
   color: $secondary-color;
   display: flex;
   font: 100% $roboto;
   height: 10vh;
   justify-content: space-between;
   padding: 0px 70px;
-  position: fixed;
   width: 100%;
 
   .logo-container {
