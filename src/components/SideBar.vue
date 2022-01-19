@@ -1,8 +1,25 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 const SideBar = defineComponent({
   name: "SideBar",
+  setup(props, context) {
+    const activityName = ref("");
+    const activityDesc = ref("");
+
+    function addActivity() {
+      context.emit("addActivity", {
+        name: activityName.value,
+        desc: activityDesc.value,
+      });
+    }
+
+    return {
+      activityName,
+      activityDesc,
+      addActivity,
+    };
+  },
 });
 
 export default SideBar;
@@ -13,6 +30,7 @@ export default SideBar;
     <div>
       <label for="activity"> Activity: </label>
       <input
+        v-model="activityName"
         placeholder="input your activity here!"
         type="text"
         id="activity"
@@ -21,6 +39,7 @@ export default SideBar;
     <div>
       <label for="desc"> Description: </label>
       <textarea
+        v-model="activityDesc"
         placeholder="give your activity description here!"
         name="Description"
         id="desc"
@@ -28,7 +47,7 @@ export default SideBar;
         rows="10"
       ></textarea>
     </div>
-    <button>+</button>
+    <button @click="addActivity">+</button>
   </section>
 </template>
 

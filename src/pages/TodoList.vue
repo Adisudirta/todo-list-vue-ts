@@ -12,6 +12,15 @@ const TodoList = defineComponent({
     SideBar,
     Footer,
   },
+  setup() {
+    function handleActivity(val: any) {
+      console.log(val);
+    }
+
+    return {
+      handleActivity,
+    };
+  },
 });
 
 export default TodoList;
@@ -20,7 +29,7 @@ export default TodoList;
 <template>
   <Header />
   <div class="main-container">
-    <SideBar />
+    <SideBar @addActivity="handleActivity" />
   </div>
   <Footer />
 </template>
