@@ -9,9 +9,14 @@ const SideBar = defineComponent({
 
     function addActivity() {
       context.emit("addActivity", {
+        id: Date.now(),
+        itsClear: false,
         name: activityName.value,
         desc: activityDesc.value,
       });
+
+      activityName.value = "";
+      activityDesc.value = "";
     }
 
     return {

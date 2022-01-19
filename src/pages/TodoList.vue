@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
+import accesStorage from "../local_storage/storage";
 
 import Header from "../components/Header.vue";
 import SideBar from "../components/SideBar.vue";
@@ -13,12 +14,16 @@ const TodoList = defineComponent({
     Footer,
   },
   setup() {
-    function handleActivity(val: any) {
-      console.log(val);
+    const todos = ref([]);
+
+    function createTodoData(val: never) {
+      todos.value = accesStorage("GET");
+      todos.value.push(val);
+      accesStorage("SET", todos.value);
     }
 
     return {
-      handleActivity,
+      createTodoData,
     };
   },
 });
@@ -29,7 +34,7 @@ export default TodoList;
 <template>
   <Header />
   <div class="main-container">
-    <SideBar @addActivity="handleActivity" />
+    <SideBar @addActivity="createTodoData" />
   </div>
   <Footer />
 </template>
