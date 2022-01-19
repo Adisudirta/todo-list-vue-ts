@@ -64,7 +64,8 @@ $secondary-color: #2c3e50;
   font: 100% $roboto;
   font-weight: bold;
   background-color: $secondary-color;
-  padding: 30px 50px 30px 70px;
+  width: 30vw;
+  padding: 20px 70px;
   height: 85vh;
 
   div {
