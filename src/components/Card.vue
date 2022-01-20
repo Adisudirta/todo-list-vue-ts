@@ -4,7 +4,7 @@ import { defineComponent } from "vue";
 const Card = defineComponent({
   name: "Card",
   props: {
-    id: { type: String, default: "" },
+    id: { type: Number, default: null },
     name: { type: String, default: "" },
     desc: { type: String, default: "" },
     status: { type: Boolean, default: false },
@@ -35,8 +35,8 @@ export default Card;
     <p>
       {{ desc }}
     </p>
-    <button @click="handleDone" v-if="status" class="btn-done">Done!</button>
-    <button @click="handleDelete" v-if="!status" class="btn-delete">
+    <button @click="handleDone" v-if="!status" class="btn-done">Done!</button>
+    <button @click="handleDelete" v-if="status" class="btn-delete">
       Delete
     </button>
   </div>
@@ -69,6 +69,7 @@ $secondary-color: #2c3e50;
   span {
     display: inline-block;
     margin-bottom: 10px;
+    font-size: 12px;
   }
 
   p {
@@ -88,7 +89,6 @@ $secondary-color: #2c3e50;
 
   .btn-done {
     background-color: $primary-color;
-    display: none;
   }
 
   .btn-delete {

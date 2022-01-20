@@ -7,6 +7,13 @@ import SideBar from "../components/SideBar.vue";
 import Card from "../components/Card.vue";
 import Footer from "../components/Footer.vue";
 
+interface Todo {
+  id: String;
+  name: string;
+  desc: String;
+  status: Boolean;
+}
+
 const TodoList = defineComponent({
   name: "TodoList",
   components: {
@@ -16,16 +23,32 @@ const TodoList = defineComponent({
     Card,
   },
   setup() {
-    const todos = ref([]);
+    const todos = ref<Todo[]>([]);
+    const doneList = ref<Todo[]>([]);
+    const notDoneList = ref<Todo[]>([]);
 
-    function createTodoData(val: never) {
+    todos.value = accesStorage("GET");
+    notDoneList.value = todos.value.filter(
+      (data: Todo) => data.status === false
+    );
+
+    function createTodoData(val: Todo) {
       todos.value = accesStorage("GET");
       todos.value.push(val);
       accesStorage("SET", todos.value);
+
+      notDoneList.value = todos.value.filter(
+        (data: Todo) => data.status === false
+      );
+
+      doneList.value = todos.value.filter((data: Todo) => data.status === true);
     }
 
     return {
       createTodoData,
+      todos,
+      doneList,
+      notDoneList,
     };
   },
 });
@@ -38,11 +61,26 @@ export default TodoList;
   <div class="main-container">
     <SideBar @addActivity="createTodoData" />
     <div class="not-done-list">
-      <h2>You have ... activities to do</h2>
-      <Card />
+      <h2>You have {{ notDoneList.length }} activities to do</h2>
+      <Card
+        v-for="activity in notDoneList"
+        :key="activity.id"
+        :id="activity.id"
+        :name="activity.name"
+        :desc="activity.desc"
+        :status="activity.status"
+      />
     </div>
     <div class="done-list">
-      <h2>You're done doing ... activities</h2>
+      <h2>You're done doing {{ doneList.length }} activities</h2>
+      <Card
+        v-for="activity in notDoneList"
+        :key="activity.id"
+        :id="activity.id"
+        :name="activity.name"
+        :desc="activity.desc"
+        :status="activity.status"
+      />
     </div>
   </div>
   <Footer />
@@ -62,6 +100,7 @@ $secondary-color: #2c3e50;
     padding: 20px;
     overflow: auto;
     border: 0.1px solid gray;
+    height: 85vh;
 
     h2 {
       font-size: 20px;
