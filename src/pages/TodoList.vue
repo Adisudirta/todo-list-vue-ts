@@ -8,7 +8,7 @@ import Card from "../components/Card.vue";
 import Footer from "../components/Footer.vue";
 
 interface Todo {
-  id: String;
+  id: Number;
   name: string;
   desc: String;
   status: Boolean;
@@ -31,6 +31,7 @@ const TodoList = defineComponent({
     notDoneList.value = todos.value.filter(
       (data: Todo) => data.status === false
     );
+    doneList.value = todos.value.filter((data: Todo) => data.status === true);
 
     function createTodoData(val: Todo) {
       todos.value = accesStorage("GET");
@@ -44,9 +45,26 @@ const TodoList = defineComponent({
       doneList.value = todos.value.filter((data: Todo) => data.status === true);
     }
 
+    function handleDone(val: Number) {
+      todos.value.forEach((data: Todo) => {
+        if (data.id === val) {
+          data.status = true;
+
+          accesStorage("SET", todos.value);
+          todos.value = accesStorage("GET");
+          notDoneList.value = todos.value.filter(
+            (data: Todo) => data.status === false
+          );
+          doneList.value = todos.value.filter(
+            (data: Todo) => data.status === true
+          );
+        }
+      });
+    }
+
     return {
       createTodoData,
-      todos,
+      handleDone,
       doneList,
       notDoneList,
     };
@@ -63,6 +81,7 @@ export default TodoList;
     <div class="not-done-list">
       <h2>You have {{ notDoneList.length }} activities to do</h2>
       <Card
+        @done="handleDone"
         v-for="activity in notDoneList"
         :key="activity.id"
         :id="activity.id"
@@ -74,7 +93,7 @@ export default TodoList;
     <div class="done-list">
       <h2>You're done doing {{ doneList.length }} activities</h2>
       <Card
-        v-for="activity in notDoneList"
+        v-for="activity in doneList"
         :key="activity.id"
         :id="activity.id"
         :name="activity.name"
