@@ -62,9 +62,27 @@ const TodoList = defineComponent({
       });
     }
 
+    function handleDelete(val: Number) {
+      todos.value.forEach((data: Todo, i) => {
+        if (data.id == val) {
+          todos.value.splice(i, 1);
+
+          accesStorage("SET", todos.value);
+          todos.value = accesStorage("GET");
+          notDoneList.value = todos.value.filter(
+            (data: Todo) => data.status === false
+          );
+          doneList.value = todos.value.filter(
+            (data: Todo) => data.status === true
+          );
+        }
+      });
+    }
+
     return {
       createTodoData,
       handleDone,
+      handleDelete,
       doneList,
       notDoneList,
     };
@@ -93,6 +111,7 @@ export default TodoList;
     <div class="done-list">
       <h2>You're done doing {{ doneList.length }} activities</h2>
       <Card
+        @delete="handleDelete"
         v-for="activity in doneList"
         :key="activity.id"
         :id="activity.id"
